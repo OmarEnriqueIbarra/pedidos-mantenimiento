@@ -123,6 +123,7 @@ table.rep-tabla td{padding:7px 8px;border-bottom:1px solid var(--br);vertical-al
           <option value="">—</option>
           <option value="Matías">Matías</option>
           <option value="Luciano">Luciano</option>
+          <option value="Omar">Omar</option>
         </select>
       </div>
       <div class="f">
@@ -179,6 +180,7 @@ table.rep-tabla td{padding:7px 8px;border-bottom:1px solid var(--br);vertical-al
           <option value="">Todos</option>
           <option value="Matías">Matías</option>
           <option value="Luciano">Luciano</option>
+          <option value="Omar">Omar</option>
         </select>
       </div>
       <div class="f">
@@ -245,7 +247,6 @@ function checkReady(){
 function registrarPedido(){
   var payload = {
     action: 'nuevo',
-    id: 'ped_'+Date.now(),
     fecha: fmtDate(hoyISO()),
     hora: document.getElementById('hora').value,
     turno: document.getElementById('turno').value,
@@ -337,7 +338,7 @@ function renderLista(){
       html += '<div class="pedido-card '+cls+'">'+
         '<div class="ped-top">'+
           '<div>'+
-            '<span class="ped-hora">'+esc(p.hora)+'</span>'+
+            '<span class="ped-hora">'+esc(p.hora)+'</span> <span style="font-family:\'Space Mono\',monospace;font-size:11px;color:var(--mu);font-weight:700">'+esc(p.id)+'</span>'+
             '<div class="ped-equipo">'+esc(p.equipo)+'</div>'+
             '<div class="ped-problema">'+esc(p.problema)+'</div>'+
             '<div class="ped-meta">📞 '+esc(p.quienLlamo)+' · 🔧 '+esc(p.turno)+'</div>'+
@@ -413,10 +414,11 @@ function generarReporte(){
   '</div>';
 
   html += '<table class="rep-tabla"><thead><tr>'+
-    '<th>Hora</th><th>Turno</th><th>Quién llamó</th><th>Equipo</th><th>Problema</th><th>Urgencia</th><th>Estado</th><th>Nota de resolución</th>'+
+    '<th>Código</th><th>Hora</th><th>Turno</th><th>Quién llamó</th><th>Equipo</th><th>Problema</th><th>Urgencia</th><th>Estado</th><th>Nota de resolución</th>'+
   '</tr></thead><tbody>';
   filtrados.forEach(function(p){
     html += '<tr>'+
+      '<td>'+esc(p.id)+'</td>'+
       '<td>'+esc(p.hora)+'</td>'+
       '<td>'+esc(p.turno)+'</td>'+
       '<td>'+esc(p.quienLlamo)+'</td>'+
