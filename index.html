@@ -181,6 +181,14 @@ table.rep-tabla td{padding:7px 8px;border-bottom:1px solid var(--br);vertical-al
           <option value="Luciano">Luciano</option>
         </select>
       </div>
+      <div class="f">
+        <label>Estado</label>
+        <select id="repEstado">
+          <option value="">Todos</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Finalizado">Finalizado</option>
+        </select>
+      </div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ac" style="margin-top:0" onclick="generarReporte()">Generar reporte</button>
@@ -371,11 +379,13 @@ function confirmarAtencion(id){
 function generarReporte(){
   var fechaIso = document.getElementById('repFecha').value;
   var turno = document.getElementById('repTurno').value;
+  var estadoFiltro = document.getElementById('repEstado').value;
   var box = document.getElementById('reporteResultado');
 
   var filtrados = PEDIDOS.slice();
   if(fechaIso) filtrados = filtrados.filter(function(p){ return p.fecha === fmtDate(fechaIso); });
   if(turno) filtrados = filtrados.filter(function(p){ return p.turno === turno; });
+  if(estadoFiltro) filtrados = filtrados.filter(function(p){ return (estadoFiltro==='Finalizado' ? p.estado==='Finalizado' : p.estado!=='Finalizado'); });
   filtrados.sort(function(a,b){ return a.hora<b.hora?-1:1; });
 
   var total = filtrados.length;
@@ -384,7 +394,8 @@ function generarReporte(){
   var pendientes = total - finalizados;
 
   var tituloPrint = 'Akapol · Mantenimiento — Reporte de Pedidos de Atención — ' +
-    (fechaIso ? fmtDate(fechaIso) : 'Todas las fechas') + ' — Turno: ' + (turno || 'Todos');
+    (fechaIso ? fmtDate(fechaIso) : 'Todas las fechas') + ' — Turno: ' + (turno || 'Todos') +
+    (estadoFiltro ? ' — Estado: '+estadoFiltro : '');
   document.getElementById('repPrintTitulo').textContent = tituloPrint;
 
   if(!total){
@@ -418,7 +429,7 @@ function generarReporte(){
 
   box.innerHTML = html;
 }
-document.getElementById('repFecha').value = hoyISO();
+// El campo Fecha del reporte arranca vacío a propósito: así "Generar reporte" sin tocar nada trae TODOS los datos.
 
 // ── Inicio ──
 checkReady();
